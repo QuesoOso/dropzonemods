@@ -1,0 +1,7 @@
+{
+  "name": "Test mod",
+  "id": "test_mod",
+  "enabledOnStart": true,
+  "include": "testmod.js",
+  "functionName": "TestMod"
+}

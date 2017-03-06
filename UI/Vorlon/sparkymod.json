@@ -1,0 +1,7 @@
+{
+  "name": "Vorlon Debugger",
+  "id": "vorlon",
+  "enabledOnStart": false,
+  "include": "VorlonMod.js",
+  "functionName": "VorlonMod"
+}
