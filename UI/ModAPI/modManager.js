@@ -6,17 +6,21 @@ function ModManager() {
     var _this = this;
     var _mods = [];
     var _init = false;
+    var _neededIncludes = [
+        "ModAPI/modApi.js",
+        "ModAPI/sharedApi.js"
+    ]
 
     this.Init = function(callback) {
         if (_init) {
             if (callback) callback();
         } else {
             // Lets make sure we load our API first
-            _this.AddInclude("ModAPI/modApi.js").then(function() {
+            _this.AddIncludes(_neededIncludes).then(function() {
                 // Get the directory of our mods
                 var modsDirectory = 66;
                 gModApi.Files.GetEnvironmentDirectory(modsDirectory).then(function(folder) {
-                    gModApi.Files.GatherFiles(folder, "", "sparkymod.json", true, false).then(function(modManifestFiles) {
+                    gModApi.Files.GatherFiles(folder, "", "mod.json", true, false).then(function(modManifestFiles) {
                         console.log(modManifestFiles);
                         var modPromises = [];
                         for (var modIndex = 0; modIndex < modManifestFiles.length; modIndex++) {
@@ -234,5 +238,23 @@ function ModManager() {
         }
         return deferred.promise();
     };
+
+    /**
+     *
+     * @param filepaths of all includes
+     * @returns {*}
+     * @constructor
+     */
+    this.AddIncludes = function(filepaths) {
+        var deferred = $.Deferred();
+        var modPromises = [];
+        for (var modIndex = 0; modIndex < filepaths.length; modIndex++) {
+            modPromises.push(_this.AddInclude(filepaths[modIndex]));
+        }
+        $.when.apply($, modPromises).always(function() {
+            deferred.resolve();
+        });
+        return deferred.promise();
+    }
 
 }
